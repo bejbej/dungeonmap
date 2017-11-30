@@ -1,0 +1,66 @@
+/* Canvas */
+.canvas {
+    position: absolute;
+    *width: 480px;
+    *height: 384px;
+    margin-left: 60px;
+}
+.canvas>svg {
+    width: 100%;
+    height: 100%;
+    position: absolute;
+    z-index: 1;
+    top: 0;
+    left: 0;
+    border: 1px dashed rgba(255,255,255,0.5);
+}
+.canvas>img {
+    *position: absolute;
+}
+.canvas svg.view .shape {
+    stroke-width: 0;
+    fill: black;
+}
+.canvas svg.view .shape.invisible {
+    opacity: 0;
+    transition-duration: 1s;
+}
+.canvas .shape.active {
+    fill: rgba(255,191,191,0.5)
+}
+.canvas .shape {
+    stroke: red;
+    stroke-width: 1px;
+    fill: rgba(255,255,255,0.5);
+}
+.canvas .handle {
+    fill: rgba(255,255,255,0);
+}
+
+.crosshair {
+    cursor: crosshair;
+}
+
+.pointer {
+    cursor: pointer;
+}
+
+.move {
+    cursor: move;
+}
+
+.ns-resize {
+    cursor: ns-resize;
+}
+
+.ew-resize {
+    cursor: ew-resize;
+}
+
+.nswe-resize {
+    cursor: nwse-resize;
+}
+
+.nesw-resize {
+    cursor: nesw-resize;
+}

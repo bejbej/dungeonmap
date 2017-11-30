@@ -1,0 +1,58 @@
+/* Toolbar & Toolbar Buttons */
+.toolbar {
+    position: fixed;
+    z-index: 2;
+}
+.toolbar #show-menu,
+.toolbar .button-group {
+    margin: 10px;
+}
+
+.toolbar #show-menu {
+    border-radius: 999px;
+}
+.toolbar button {
+    width: 40px;
+    height: 40px;
+    display: block;
+    position: relative;
+    border: 1px solid black;
+    background-color: rgba(255,255,255,0.5);
+}
+
+.toolbar .button-group button:first-of-type {
+    border-top-left-radius: 999px;
+    border-top-right-radius: 999px;
+}
+.toolbar .button-group button:not(:first-of-type) {
+    border-top-width: 0px;
+}
+.toolbar .button-group button:last-of-type {
+    border-bottom-left-radius: 999px;
+    border-bottom-right-radius: 999px;
+}
+
+.toolbar button .tooltip {
+    display: none;
+    pointer-events: none;
+}
+
+.toolbar button:active .tooltip,
+.toolbar button:hover .tooltip {
+    display: block;
+    position: absolute;
+    left: 42px;
+    top: 7px;
+    padding: 4px 8px 4px 8px;
+    background-color: rgba(0,0,0,0.5);
+    color: white;
+    border-radius: 999px;
+}
+
+.toolbar button.active {
+    background-color: #3498db;
+}
+.toolbar button:not(.active):hover,
+.toolbar button:not(.active):active {
+    background-color: white;
+}

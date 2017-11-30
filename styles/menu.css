@@ -1,0 +1,47 @@
+/* Menu */
+#menu {
+    position: fixed;
+    width: 400px;
+    height: 100%;
+    background-color:rgba(191,191,191,1);
+    z-index: 4;
+    transition-duration: 100ms;
+    left: 0;
+}
+#menu.hidden {
+    left: -400px;
+    transition-duration: 100ms;
+}
+#menu button:hover {
+    background-color: rgba(0,0,0,0.2) !important;
+}
+#menu button {
+    display: block;
+    height: 48px;
+    width: 100%;
+    padding-left: 16px;
+    border: 0;
+    background-color: transparent;
+    text-align: left;
+}
+#menu .file {
+    height:100%;
+    width: 150px;
+    border-right: 1px solid rgba(0,0,0,0.5);
+}
+#menu .properties {
+    position: absolute;
+    height:100%;
+    width:250px;
+    left: 151px;
+    top: 0px;
+    padding: 10px;
+    border-right: 1px solid black;
+}
+
+#menu .properties input {
+    display: block;
+    padding: 8px 8px;
+    border: 0;
+    width: 100%;
+}

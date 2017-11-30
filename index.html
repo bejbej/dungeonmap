@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <link rel="stylesheet" type="text/css" href="styles/font-awesome.min.css">
+    <link rel="stylesheet" type="text/css" href="styles/app.css">
+    <link rel="stylesheet" type="text/css" href="styles/toolbar.css">
+    <link rel="stylesheet" type="text/css" href="styles/menu.css">
+    <link rel="stylesheet" type="text/css" href="styles/canvas.css">
+</head>
+
+<body>
+    <div id=menu class=hidden>
+        <div class=file>
+            <button id=hide-menu><i class="fa fa-arrow-left"></i> Back</button>
+            <button id=new><i class="fa fa-file-o"></i> New</button>
+            <button id=open><i class="fa fa-folder-open-o"></i> Open</button>
+            <button id=save><i class="fa fa-floppy-o"></i> Save As</button>
+        </div>
+        <div class=properties>
+            <label>Image URL</label><br>
+            <input id=image-url /><br>
+        </div>
+    </div>
+    <div id=toolbar class=toolbar>
+        <button id=show-menu>
+            <i class="fa fa-cog"></i>
+            <div class=tooltip>Menu</div>
+        </button>
+        <div class=button-group>
+            <button id=select>
+                <i class="fa fa-arrows"></i>
+                <div class=tooltip>Select</div>
+            </button>
+            <button id=create>
+                <i class="fa fa-pencil"></i>
+                <div class=tooltip>Draw</div>
+            </button>
+            <button id=view>
+                <i class="fa fa-eye"></i>
+                <div class=tooltip>View</div>
+            </button>
+        </div>
+    </div>
+    <div id="canvas" class=canvas>
+        <img id=img />
+        <svg id=svg></svg>
+    </div>
+</body>
+<script>var app = {};</script>
+<script src="scripts/file.js"></script>
+<script src="scripts/toolbar.js"></script>
+<script src="scripts/canvas.js"></script>
+<script src="scripts/menu.js"></script>
+<script>
+    app.canvas.load({"imageUrl":"./images/map.png","shapes":[{"tagName":"rect","x":"46","y":"141","width":"124","height":"199","visible":true},{"tagName":"rect","x":"169","y":"216","width":"74","height":"123","visible":true},{"tagName":"rect","x":"167","y":"142","width":"88","height":"73","visible":true},{"tagName":"rect","x":"252","y":"155","width":"64","height":"49","visible":true},{"tagName":"rect","x":"285","y":"70","width":"150","height":"88","visible":true},{"tagName":"rect","x":"262","y":"202","width":"78","height":"113","visible":true}]});
+</script>
+</html>
