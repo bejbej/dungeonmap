@@ -1,26 +1,19 @@
-app.menu = new function () {
+var Menu = function () {
     let menu = document.getElementById("menu");
+    let callbacks = {};
 
-    menu.querySelector("#hide-menu").addEventListener("click", () => this.hide());
+    let addEventListener = (type, id) => {
+        menu.querySelector("#" + id).addEventListener(type, event => {
+            let callback = callbacks[id];
+            if (callback !== undefined) {
+                callback();
+            }
+        });
+    }
 
-    menu.querySelector("#new").addEventListener("click", () => {
-        app.file.new();
-        this.hide();
-    });
-
-    menu.querySelector("#open").addEventListener("click", () => {
-        app.file.open();
-        this.hide();
-    });
-    
-    menu.querySelector("#save").addEventListener("click", () => {
-        app.file.save();
-        this.hide();
-    });
-
-    menu.querySelector("#image-url").addEventListener("change", event => {
-        document.getElementById("img").setAttribute("src", event.target.value);
-    });
+    this.on = (key, func) => {
+        callbacks[key] = func;
+    }
 
     this.show = () => {
         menu.classList.remove("hidden");
@@ -28,6 +21,14 @@ app.menu = new function () {
     }
 
     this.hide = () => {
-        menu.classList.add("hidden");
+        menu.classList.add("hidden")
     }
+
+    this.getImageUrl = () => {
+        return menu.querySelector("#image-url").value;
+    }
+
+    addEventListener("change", "image-url");
+    addEventListener("click", "new");
+    menu.querySelector("#hide-menu").addEventListener("click", this.hide);
 }

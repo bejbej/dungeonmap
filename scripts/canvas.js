@@ -1,10 +1,11 @@
-app.canvas = new function () {
-    let canvas = document.getElementById("canvas");
+var Canvas = function (element) {
+    let canvas = element;
     let svg = canvas.querySelector("#svg");
     let image = canvas.querySelector("#img");
     let closeCurrentTool = () => { };
+    let callbacks = {};
 
-    let createShape = () => {
+    let drawShape = () => {
         var origin = undefined;
         var shape = undefined;
 
@@ -38,6 +39,11 @@ app.canvas = new function () {
             canvas.removeEventListener("mousemove", mouseMove);
             canvas.removeEventListener("mouseup", mouseUp);
             canvas.addEventListener("mousedown", mouseDown);
+
+            let callback = callbacks["shapes"];
+            if (callback) {
+                callback();
+            }
         }
 
         canvas.classList.add("crosshair");
@@ -100,6 +106,11 @@ app.canvas = new function () {
             canvas.removeEventListener("mouseup", mouseUp);
             shapes.forEach(shape => shape.addEventListener("mousedown", selectShape));
             hideDragHandles = resizeShape(shape);
+
+            let callback = callbacks["shapes"];
+            if (callback) {
+                callback();
+            }
         }
 
         var keyDown = event => {
@@ -278,6 +289,11 @@ app.canvas = new function () {
             createDragHandles();
             canvas.removeEventListener("mousemove", mouseMove);
             canvas.removeEventListener("mouseup", mouseUp);
+
+            let callback = callbacks["shapes"];
+            if (callback) {
+                callback();
+            }
         }
 
         createDragHandles();
@@ -292,6 +308,11 @@ app.canvas = new function () {
 
         let toggleVisibility = event => {
             event.target.classList.toggle("invisible");
+
+            let callback = callbacks["shapes"];
+            if (callback) {
+                callback();
+            }
         }
 
         svg.classList.add("view");
@@ -305,9 +326,13 @@ app.canvas = new function () {
         };
     }
 
+    this.on = (key, func) => {
+        callbacks[key] = func;
+    }
+
     this.startDrawing = () => {
         closeCurrentTool();
-        closeCurrentTool = createShape();
+        closeCurrentTool = drawShape();
     }
 
     this.startSelecting = () => {
@@ -320,20 +345,49 @@ app.canvas = new function () {
         closeCurrentTool = viewShapes();
     }
 
+    this.getData = () => {
+        let data = {
+            imageUrl: image.getAttribute("src"),
+            shapes: []
+        };
+
+        let shapes = svg.querySelectorAll(".shape");
+        shapes.forEach(shape => { 
+            data.shapes.push({ 
+                tagName: shape.tagName, 
+                x: shape.getAttribute("x"), 
+                y: shape.getAttribute("y"), 
+                width: shape.getAttribute("width"), 
+                height: shape.getAttribute("height"), 
+                isVisible: shape.className.baseVal.indexOf("invisible") === -1 
+            }); 
+        });
+
+        return data;
+    }
+
     this.reset = () => {
         closeCurrentTool();
         closeCurrentTool = () => { };
-
-        image.setAttribute("src", "");
-        svg.querySelectorAll("rect").forEach(shape => svg.removeChild(shape));
+        this.setImageUrl("");
+        this.setShapes([]);
     }
 
-    this.load = (data) => {
-        this.reset();
-        
-        image.setAttribute("src", data.imageUrl);
+    this.setImageUrl = (imageUrl) => {
+        image.setAttribute("src", imageUrl);
 
-        data.shapes.forEach(savedShape => {
+        let callback = callbacks["shapes"];
+        if (callback) {
+            callback();
+        }
+    }
+
+    this.setShapes = (shapes) => {
+        closeCurrentTool();
+        closeCurrentTool = () => { };
+        svg.querySelectorAll(".shape").forEach(shape => svg.removeChild(shape));
+
+        shapes.forEach(savedShape => {
             let shape = document.createElementNS("http://www.w3.org/2000/svg", "rect");
             shape.classList.add("shape");
             shape.setAttribute("x", savedShape.x);
@@ -341,13 +395,16 @@ app.canvas = new function () {
             shape.setAttribute("width", savedShape.width); 
             shape.setAttribute("height", savedShape.height);
 
-            if (!savedShape.visible) {
+            if (!savedShape.isVisible) {
                 shape.classList.add("invisible");
             }
 
             svg.appendChild(shape);
         });
 
-        app.toolbar.reset();
+        let callback = callbacks["shapes"];
+        if (callback) {
+            callback();
+        }
     }
 }

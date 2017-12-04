@@ -11,12 +11,9 @@
 
 <body>
     <div id=menu class=hidden>
-        <div class=file>
-            <button id=hide-menu><i class="fa fa-arrow-left"></i> Back</button>
-            <button id=new><i class="fa fa-file-o"></i> New</button>
-            <button id=open><i class="fa fa-folder-open-o"></i> Open</button>
-            <button id=save><i class="fa fa-floppy-o"></i> Save As</button>
-        </div>
+        <button id=hide-menu><i class="fa fa-arrow-left"></i> Back</button>
+        <button id=new><i class="fa fa-file-o"></i> New</button>
+        <hr>
         <div class=properties>
             <label>Image URL</label><br>
             <input id=image-url /><br>
@@ -32,7 +29,7 @@
                 <i class="fa fa-arrows"></i>
                 <div class=tooltip>Select</div>
             </button>
-            <button id=create>
+            <button id=draw>
                 <i class="fa fa-pencil"></i>
                 <div class=tooltip>Draw</div>
             </button>
@@ -47,12 +44,49 @@
         <svg id=svg></svg>
     </div>
 </body>
-<script>var app = {};</script>
 <script src="scripts/file.js"></script>
-<script src="scripts/toolbar.js"></script>
 <script src="scripts/canvas.js"></script>
+<script src="scripts/toolbar.js"></script>
 <script src="scripts/menu.js"></script>
 <script>
-    app.canvas.load({"imageUrl":"./images/map.png","shapes":[{"tagName":"rect","x":"46","y":"141","width":"124","height":"199","visible":true},{"tagName":"rect","x":"169","y":"216","width":"74","height":"123","visible":true},{"tagName":"rect","x":"167","y":"142","width":"88","height":"73","visible":true},{"tagName":"rect","x":"252","y":"155","width":"64","height":"49","visible":true},{"tagName":"rect","x":"285","y":"70","width":"150","height":"88","visible":true},{"tagName":"rect","x":"262","y":"202","width":"78","height":"113","visible":true}]});
+    var file = new File();
+    var canvas = new Canvas(document.getElementById("canvas"));
+    var toolbar = new Toolbar(document.getElementById("toolbar"));
+    var menu = new Menu(document.getElementById("menu"));
+
+    // Load initial data
+    var data = file.loadFromHash();
+    canvas.setImageUrl(data.imageUrl);
+    canvas.setShapes(data.shapes);
+
+    // Set up event listeners
+    toolbar.on("show-menu", () => menu.show());
+    toolbar.on("select", () => canvas.startSelecting());
+    toolbar.on("draw", () => canvas.startDrawing());
+    toolbar.on("view", () => canvas.startViewing());
+
+    menu.on("new", () => {
+        menu.hide();
+        canvas.setImageUrl("");
+        canvas.setShapes([]);
+    });
+
+    menu.on("image-url", () => {
+        canvas.setImageUrl(menu.getImageUrl());
+    });
+
+    canvas.on("shapes", () => {
+        file.saveToHash(canvas.getData());
+    });
+
+    window.onhashchange = () => {
+        var data = file.loadFromHash();
+        canvas.setImageUrl(data.imageUrl);
+        canvas.setShapes(data.shapes);
+        menu.close();
+        toolbar.reset();
+    }
+
+    toolbar.reset();
 </script>
 </html>
