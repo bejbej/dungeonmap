@@ -117,6 +117,11 @@ var Canvas = function (element) {
             if (event.keyCode === 8 || event.keyCode === 46) {
                 svg.removeChild(shape);
                 unselectShape();
+
+                let callback = callbacks["shapes"];
+                if (callback) {
+                    callback();
+                }
             }
         }
 
