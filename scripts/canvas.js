@@ -144,6 +144,7 @@ var Canvas = function (element) {
         var dragHandlePadding = 8;
         var dragHandles = [];
         var origin = undefined;
+        var shapeOrigin = undefined;
         var dragStrategy = undefined;
 
         var createDragHandle = (x, y, width, height, cursor, dragStrategy) => {
@@ -174,7 +175,7 @@ var Canvas = function (element) {
                 dragHandlePadding + dragHandlePadding,
                 dragHandlePadding + dragHandlePadding,
                 "nswe-resize",
-                ["x", "y"]
+                "nw"
             );
 
             createDragHandle(
@@ -183,7 +184,7 @@ var Canvas = function (element) {
                 width - dragHandlePadding - dragHandlePadding - 2,
                 dragHandlePadding + dragHandlePadding,
                 "ns-resize",
-                ["y"]
+                "n"
             );
 
             createDragHandle(
@@ -192,7 +193,7 @@ var Canvas = function (element) {
                 dragHandlePadding + dragHandlePadding,
                 dragHandlePadding + dragHandlePadding,
                 "nesw-resize",
-                ["y", "width"]
+                "ne"
             );
 
             createDragHandle(
@@ -201,7 +202,7 @@ var Canvas = function (element) {
                 dragHandlePadding + dragHandlePadding,
                 height - dragHandlePadding - dragHandlePadding - 2,
                 "ew-resize",
-                ["width"]
+                "e"
             );
 
             createDragHandle(
@@ -210,7 +211,7 @@ var Canvas = function (element) {
                 dragHandlePadding + dragHandlePadding,
                 dragHandlePadding + dragHandlePadding,
                 "nswe-resize",
-                ["width", "height"]
+                "se"
             );
 
             createDragHandle(
@@ -219,7 +220,7 @@ var Canvas = function (element) {
                 width - dragHandlePadding - dragHandlePadding - 2,
                 dragHandlePadding + dragHandlePadding,
                 "ns-resize",
-                ["height"]
+                "s"
             );
 
             createDragHandle(
@@ -228,7 +229,7 @@ var Canvas = function (element) {
                 dragHandlePadding + dragHandlePadding,
                 dragHandlePadding + dragHandlePadding,
                 "nesw-resize",
-                ["x", "height"]
+                "sw"
             );
 
             createDragHandle(
@@ -237,7 +238,7 @@ var Canvas = function (element) {
                 dragHandlePadding + dragHandlePadding,
                 height - dragHandlePadding - dragHandlePadding - 2,
                 "ew-resize",
-                ["x"]
+                "w"
             );
         }
 
@@ -257,39 +258,40 @@ var Canvas = function (element) {
         }
 
         var mouseMove = event => {
+            shapeOrigin = shapeOrigin || {
+                x: Number(shape.getAttribute("x")),
+                y: Number(shape.getAttribute("y")),
+                width: Number(shape.getAttribute("width")),
+                height: Number(shape.getAttribute("height"))
+            };
             origin = origin || event;
-            var x = Number(shape.getAttribute("x"));
-            var y = Number(shape.getAttribute("y"));
-            var width = Number(shape.getAttribute("width"));
-            var height = Number(shape.getAttribute("height"));
 
-            if (dragStrategy.indexOf("x") > -1) {
-                x = x + event.offsetX - origin.offsetX;
-                width = width - event.offsetX + origin.offsetX;
+            let deltaX = event.offsetX - origin.offsetX;
+            let deltaY = event.offsetY - origin.offsetY;
+
+            if (dragStrategy.indexOf("w") > -1) {
+                shape.setAttribute("x",  deltaX < shapeOrigin.width ? shapeOrigin.x + deltaX : shapeOrigin.x + shapeOrigin.width);
+                shape.setAttribute("width", Math.abs(shapeOrigin.width - deltaX));
             }
 
-            if (dragStrategy.indexOf("y") > -1) {
-                y = y + event.offsetY - origin.offsetY;
-                height = height - event.offsetY + origin.offsetY;
+            if (dragStrategy.indexOf("e") > -1) {
+                shape.setAttribute("x", shapeOrigin.width + deltaX > 0 ? shapeOrigin.x : shapeOrigin.x + shapeOrigin.width + deltaX);
+                shape.setAttribute("width", Math.abs(shapeOrigin.width + deltaX));
             }
 
-            if (dragStrategy.indexOf("width") > -1) {
-                width = width + event.offsetX - origin.offsetX;
+            if (dragStrategy.indexOf("n") > -1) {
+                shape.setAttribute("y",  deltaY < shapeOrigin.height ? shapeOrigin.y + deltaY : shapeOrigin.y + shapeOrigin.height);
+                shape.setAttribute("height", Math.abs(shapeOrigin.height - deltaY));
             }
 
-            if (dragStrategy.indexOf("height") > -1) {
-                height = height + event.offsetY - origin.offsetY;
+            if (dragStrategy.indexOf("s") > -1) {
+                shape.setAttribute("y", shapeOrigin.height + deltaY > 0 ? shapeOrigin.y : shapeOrigin.y + shapeOrigin.height + deltaY);
+                shape.setAttribute("height", Math.abs(shapeOrigin.height + deltaY));
             }
-
-            shape.setAttribute("x", x);
-            shape.setAttribute("y", y);
-            shape.setAttribute("width", width);
-            shape.setAttribute("height", height);
-
-            origin = event;
         }
 
         var mouseUp = event => {
+            shapeOrigin = undefined;
             origin = undefined;
             createDragHandles();
             canvas.removeEventListener("mousemove", mouseMove);
