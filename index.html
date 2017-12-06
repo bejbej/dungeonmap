@@ -39,9 +39,13 @@
             </button>
         </div>
     </div>
-    <div id="canvas" class=canvas>
-        <img id=img />
-        <svg id=svg></svg>
+    <div class=line-height-none>
+        <div class=spacer-height></div><br>
+        <div class=spacer-width></div><div id="canvas" class=canvas>
+            <img id=img />
+            <svg id=svg></svg>
+        </div><div class=spacer-width></div><br>
+        <div class=spacer-height></div>    
     </div>
 </body>
 <script src="scripts/file.js"></script>
@@ -83,13 +87,19 @@
 
     window.onhashchange = () => {
         var data = file.loadFromHash();
-        canvas.setImageUrl(data.imageUrl);
-        canvas.setShapes(data.shapes);
+        if (data) {
+            canvas.setImageUrl(data.imageUrl);
+            canvas.setShapes(data.shapes);
+        }
         menu.hide();
         toolbar.reset();
+        window.setTimeout(() => window.scroll(0.9 * window.innerWidth, 0.9 * window.innerHeight), 10);
     }
 
+    // Initialize the app
     toolbar.reset();
+    window.setTimeout(() => window.scroll(0.9 * window.innerWidth, 0.9 * window.innerHeight), 10);
+    
     if (data === null) {
         location.hash = "2\\./images/map.png\\/\\k\\2D\\1y\\37\\2f\\3O\\1A\\1x\\2d\\2E\\1O\\19\\3y\\2R\\10\\n\\4T\\16\\2M\\1O\\46\\3A\\1E\\1n";
     }

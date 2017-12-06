@@ -1,9 +1,7 @@
 /* Canvas */
 .canvas {
-    position: absolute;
-    *width: 480px;
-    *height: 384px;
-    margin-left: 60px;
+    position: relative;
+    display: inline-block;
 }
 .canvas>svg {
     width: 100%;
