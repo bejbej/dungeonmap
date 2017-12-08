@@ -32,7 +32,7 @@
     fill: rgba(255,255,255,0.5);
 }
 .canvas .handle {
-    fill: rgba(255,255,255,0);
+    fill: rgba(255,255,255,0.5);
 }
 
 .crosshair {
