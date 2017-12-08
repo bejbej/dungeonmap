@@ -414,4 +414,11 @@ var Canvas = function (element) {
             callback();
         }
     }
+
+    image.addEventListener("load", () => {
+        let callback = callbacks["load"];
+        if (callback) {
+            callback();
+        }
+    });
 }

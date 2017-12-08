@@ -85,6 +85,10 @@
         file.saveToHash(canvas.getData());
     });
 
+    canvas.on("load", () => {
+        window.setTimeout(() => window.scroll(0.9 * window.innerWidth - 60, 0.9 * window.innerHeight - 60), 0);
+    });
+
     window.onhashchange = () => {
         var data = file.loadFromHash();
         if (data) {
@@ -93,12 +97,10 @@
         }
         menu.hide();
         toolbar.reset();
-        window.setTimeout(() => window.scroll(0.9 * window.innerWidth, 0.9 * window.innerHeight), 10);
     }
 
     // Initialize the app
     toolbar.reset();
-    window.setTimeout(() => window.scroll(0.9 * window.innerWidth, 0.9 * window.innerHeight), 10);
     
     if (data === null) {
         location.hash = "2\\./images/map.png\\/\\k\\2D\\1y\\37\\2f\\3O\\1A\\1x\\2d\\2E\\1O\\19\\3y\\2R\\10\\n\\4T\\16\\2M\\1O\\46\\3A\\1E\\1n";
