@@ -1,6 +1,21 @@
 * {
     box-sizing: border-box;
 }
+::-webkit-scrollbar {
+    background-color:rgba(0,0,0,0);
+}
+::-webkit-scrollbar-thumb {
+    background-color: rgba(255,255,255,0.75);
+    border: 1px solid black;
+    border-radius: 999px;
+}
+::-webkit-scrollbar-thumb:vertical {
+    width: 20px;
+    height: 20px;
+}
+::-webkit-scrollbar-corner {
+    background-color: black;
+}
 body {
     margin: 0;
     background-color: black;
