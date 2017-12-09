@@ -3,6 +3,10 @@ var File = function () {
     let characters = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz+/";
 
     let intToRadix = value => {
+        if (value < 0) {
+            throw "value can't be less than 0";
+        }
+
         if (value === 0) {
             return "0";
         }

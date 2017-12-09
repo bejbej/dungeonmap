@@ -1,6 +1,7 @@
 var Toolbar = function (element) {
+    
     let toolbar = element;
-    let callbacks = {};
+    let _arbiter = new Arbiter();
 
     let setToolAsActive = (element, toolFunc) => {
         toolbar.querySelectorAll("button.active").forEach(button => button.classList.remove("active"));
@@ -10,10 +11,7 @@ var Toolbar = function (element) {
 
     let addActionListener = id => {
         toolbar.querySelector("#" + id).addEventListener("click", event => {
-            let callback = callbacks[id];
-            if (callback !== undefined) {
-                callback();
-            }
+            _arbiter.broadcast(id);
         });
     }
 
@@ -21,24 +19,17 @@ var Toolbar = function (element) {
         toolbar.querySelector("#" + id).addEventListener("click", event => {
             toolbar.querySelectorAll("button.active").forEach(button => button.classList.remove("active"));
             event.target.classList.add("active");
-            let callback = callbacks[id];
-            if (callback !== undefined) {
-                callback();
-            }
+            _arbiter.broadcast(id);
         });
     }
 
-    this.on = (key, func) => {
-        callbacks[key] = func;
-    }
+    this.on = _arbiter.register;
 
     this.reset = () => {
         toolbar.querySelectorAll("button.active").forEach(button => button.classList.remove("active"));
         toolbar.querySelector("#select").classList.add("active");
-        let callback = callbacks["select"];
-        if (callback !== undefined) {
-            callback();
-        }
+        _arbiter.broadcast("select");
+        
     }
 
     addActionListener("show-menu");

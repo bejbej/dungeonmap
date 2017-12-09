@@ -21,7 +21,7 @@
     </div>
     <div id=toolbar class=toolbar>
         <button id=show-menu>
-            <i class="fa fa-cog"></i>
+            <i class="fa fa-bars"></i>
             <div class=tooltip>Menu</div>
         </button>
         <div class=button-group>
@@ -49,14 +49,23 @@
     </div>
 </body>
 <script src="scripts/file.js"></script>
-<script src="scripts/canvas.js"></script>
-<script src="scripts/toolbar.js"></script>
 <script src="scripts/menu.js"></script>
+<script src="scripts/toolbar.js"></script>
+<script src="scripts/arbiter.js"></script>
+<script src="scripts/canvas.js"></script>
+<script src="scripts/canvas-manager.js"></script>
+<script src="scripts/draw-tool.js"></script>
+<script src="scripts/delete-tool.js"></script>
+<script src="scripts/move-tool.js"></script>
+<script src="scripts/resize-tool.js"></script>
+<script src="scripts/select-tool.js"></script>
+<script src="scripts/view-tool.js"></script>
 <script>
     var file = new File();
     var canvas = new Canvas(document.getElementById("canvas"));
     var toolbar = new Toolbar(document.getElementById("toolbar"));
     var menu = new Menu(document.getElementById("menu"));
+    var canvasManager = new CanvasManager(document.getElementById("canvas"));
 
     // Load initial data
     var data = file.loadFromHash();
@@ -65,28 +74,27 @@
         canvas.setShapes(data.shapes);
     }
 
-    // Set up event listeners
     toolbar.on("show-menu", () => menu.show());
-    toolbar.on("select", () => canvas.startSelecting());
-    toolbar.on("draw", () => canvas.startDrawing());
-    toolbar.on("view", () => canvas.startViewing());
+    toolbar.on("select", () => canvasManager.setTools([ResizeTool, SelectTool, MoveTool, DeleteTool]));
+    toolbar.on("draw", () => canvasManager.setTools([DrawRectangleTool]));
+    toolbar.on("view", () => canvasManager.setTools([ViewTool]));
 
     menu.on("new", () => {
         menu.hide();
-        canvas.setImageUrl("");
-        canvas.setShapes([]);
+        canvas.reset();
     });
 
     menu.on("image-url", () => {
         canvas.setImageUrl(menu.getImageUrl());
-    });
-
-    canvas.on("shapes", () => {
         file.saveToHash(canvas.getData());
     });
 
+    canvasManager.on("canvas-changed", () => file.saveToHash(canvas.getData()));
+
     canvas.on("load", () => {
-        window.setTimeout(() => window.scroll(0.9 * window.innerWidth - 60, 0.9 * window.innerHeight - 60), 0);
+        let x = 0.9 * window.innerWidth - 60;
+        let y = 0.9 * window.innerHeight - 60;
+        window.setTimeout(() => window.scroll(x, y));
     });
 
     window.onhashchange = () => {
@@ -101,9 +109,12 @@
 
     // Initialize the app
     toolbar.reset();
-    
     if (data === null) {
         location.hash = "2\\./images/map.png\\/\\k\\2D\\1y\\37\\2f\\3O\\1A\\1x\\2d\\2E\\1O\\19\\3y\\2R\\10\\n\\4T\\16\\2M\\1O\\46\\3A\\1E\\1n";
     }
+
+</script>
+<script>
+
 </script>
 </html>

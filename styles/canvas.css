@@ -12,19 +12,16 @@
     left: 0;
     border: 1px dashed rgba(255,255,255,0.5);
 }
-.canvas>img {
-    *position: absolute;
-}
-.canvas svg.view .shape {
+.canvas.view .shape {
     stroke-width: 0;
     fill: black;
 }
-.canvas svg.view .shape.invisible {
+.canvas.view .shape.invisible {
     opacity: 0;
     transition-duration: 1s;
 }
 .canvas .shape.active {
-    fill: rgba(255,191,191,0.5)
+    fill: rgba(255,0,0,0.5)
 }
 .canvas .shape {
     stroke: red;
@@ -32,7 +29,7 @@
     fill: rgba(255,255,255,0.5);
 }
 .canvas .handle {
-    fill: rgba(255,255,255,0);
+    fill: rgba(255,255,255,0.0);
 }
 
 .crosshair {
